@@ -1,0 +1,15 @@
+@import '../../theme.css';
+.header {
+  display: flex;
+  padding: 1.5rem var(--main-horizontal-padding);
+  background-color: var(--dark-primary-color);
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
+.title {
+  font-size: 2.2rem;
+  font-weight: 500;
+  color: var(--dark-primary-text);
+}

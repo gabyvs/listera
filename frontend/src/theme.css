@@ -1,0 +1,13 @@
+:root {
+  /* space */
+  --main-horizontal-padding: 6rem;
+  --border-radius: .5rem;
+
+  /* colors */
+  --separator: rgba(0,0,0,.14);
+  --dark-primary-color: rgb(55, 64, 70);
+  --light-primary-color: #fafbfc;
+  --accent-color: #00bcd4;
+  --accent-dark-color: #0097a7;
+  --dark-primary-text: #fafbfc;
+}

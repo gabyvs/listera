@@ -1,0 +1,37 @@
+@import '../../theme.css';
+.main {
+  margin-top: 6rem;
+  padding: 2rem var(--main-horizontal-padding);
+  display: flex;
+  justify-content: space-between;
+}
+
+.taskListContainer,
+.detailsContainer{
+  -webkit-box-shadow: 1px 0 10px -2px rgba(204,204,204,1);
+  -moz-box-shadow: 1px 0 10px -2px rgba(204,204,204,1);
+  box-shadow: 1px 0 10px -2px rgba(204,204,204,1);
+  border-radius: var(--border-radius);
+  width: 48%;
+}
+
+.taskListHeader {
+  border-bottom: 1px solid var(--separator);
+  padding: 1rem 3rem;
+}
+
+.addTaskBtn {
+  background-color: var(--accent-color);
+  border: none;
+  font-size: 1.6rem;
+  font-weight: 500;
+}
+
+.addTaskBtn:hover {
+  background-color: var(--accent-dark-color);
+}
+
+.img {
+  width: 100%;
+  height: 100%;
+}

@@ -1,0 +1,8 @@
+@import '../../theme.css';
+.list {
+  padding: 1rem 3rem;
+}
+.task {
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--separator);
+}
