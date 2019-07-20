@@ -1,0 +1,64 @@
+type Query {
+    description: String
+    tasks: [Task]!
+    task(id: ID!): Task
+}
+
+type Mutation {
+    createTask(data: CreateTask): Task
+    deleteTask(id: ID!): Task
+    updateTask(task: UpdateTask!): Task
+}
+
+type Task {
+    id: ID!
+    parentId: ID
+    createdAt: Int
+    status: Status
+    progress: Int
+    name: String
+    description: String
+    subTasks: [Task]
+    dueDate: Int
+    tags: [String]
+    priority: Priority
+}
+
+input CreateTask {
+    id: ID
+    parentId: ID
+    createdAt: Int
+    status: Status
+    progress: Int
+    name: String
+    description: String
+    subTasks: [CreateTask]
+    dueDate: Int
+    tags: [String]
+    priority: Priority
+}
+
+input UpdateTask {
+    id: ID
+    parentId: ID
+    createdAt: Int
+    status: Status
+    progress: Int
+    name: String
+    description: String
+    subTasks: [UpdateTask]
+    dueDate: Int
+    tags: [String]
+    priority: Priority
+}
+
+enum Priority {
+    LOW
+    NORMAL
+    HIGH
+}
+
+enum Status {
+    NEW
+    DONE
+}

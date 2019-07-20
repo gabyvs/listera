@@ -1,7 +1,11 @@
 {
-  "name": "listera",
+  "name": "listera-frontend",
   "version": "0.1.0",
   "private": true,
+  "license": "UNLICENSED",
+  "author": {
+    "name": "Gabriela Vazquez"
+  },
   "dependencies": {
     "@types/jest": "24.0.15",
     "@types/node": "12.6.2",
