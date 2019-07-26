@@ -1,0 +1,16 @@
+type User {
+  id: ID! @id
+  name: String!
+  email: String!
+}
+
+enum Priority {
+    LOW
+    NORMAL
+    HIGH
+}
+
+enum Status {
+    NEW
+    DONE
+}
