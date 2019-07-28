@@ -1,9 +1,13 @@
-const { GraphQLServer } = require('graphql-yoga');
-const resolvers = require('./resolvers');
+require('dotenv').config({ path: '.env' });
+const createServer = require('./createServer');
+const db = require('./db');
 
-const server = new GraphQLServer({
-  typeDefs: './src/schema.graphql',
-  resolvers: resolvers
-});
-
-server.start().then(() => console.log(`The server is running on http://localhost:4000`));
+const server = createServer();
+server
+  .start({
+    cors: {
+      credentials: true,
+      origin: process.env.FRONTEND_URL
+    }},
+    (details) => console.log(`The server is running on http://localhost:${details.port}`)
+  );
