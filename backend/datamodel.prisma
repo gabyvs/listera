@@ -14,3 +14,18 @@ enum Status {
     NEW
     DONE
 }
+
+type Task {
+    id: ID! @id
+    createdAt: DateTime! @createdAt
+    updatedAt: DateTime! @updatedAt
+    status: Status! @default(value: NEW)
+    progress: Int! @default(value: 0)
+    name: String! @default(value: "")
+    description: String! @default(value: "")
+    dueDate: Int
+    priority: Priority! @default(value: NORMAL)
+    tags: [String!]! @scalarList(strategy:RELATION)
+    parentId: Task @relation(link: INLINE, name: "Parent")
+    subTasks: [Task!]! @relation(name: "Children")
+}

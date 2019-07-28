@@ -1,5 +1,9 @@
 # source: https://us1.prisma.sh/gv/listera/dev
-# timestamp: Thu Jul 25 2019 19:43:49 GMT-0700 (Pacific Daylight Time)
+# timestamp: Sat Jul 27 2019 20:16:25 GMT-0700 (Pacific Daylight Time)
+
+type AggregateTask {
+  count: Int!
+}
 
 type AggregateUser {
   count: Int!
@@ -10,6 +14,8 @@ type BatchPayload {
   count: Long!
 }
 
+scalar DateTime
+
 """
 The `Long` scalar type represents non-fractional signed whole numeric values.
 Long can represent values between -(2^63) and 2^63 - 1.
@@ -18,11 +24,17 @@ scalar Long
 
 type Mutation {
   createUser(data: UserCreateInput!): User!
+  createTask(data: TaskCreateInput!): Task!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
+  updateTask(data: TaskUpdateInput!, where: TaskWhereUniqueInput!): Task
   deleteUser(where: UserWhereUniqueInput!): User
+  deleteTask(where: TaskWhereUniqueInput!): Task
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
+  upsertTask(where: TaskWhereUniqueInput!, create: TaskCreateInput!, update: TaskUpdateInput!): Task!
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
+  updateManyTasks(data: TaskUpdateManyMutationInput!, where: TaskWhereInput): BatchPayload!
   deleteManyUsers(where: UserWhereInput): BatchPayload!
+  deleteManyTasks(where: TaskWhereInput): BatchPayload!
 }
 
 enum MutationType {
@@ -52,10 +64,19 @@ type PageInfo {
   endCursor: String
 }
 
+enum Priority {
+  LOW
+  NORMAL
+  HIGH
+}
+
 type Query {
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
+  tasks(where: TaskWhereInput, orderBy: TaskOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Task]!
   user(where: UserWhereUniqueInput!): User
+  task(where: TaskWhereUniqueInput!): Task
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
+  tasksConnection(where: TaskWhereInput, orderBy: TaskOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): TaskConnection!
 
   """Fetches an object given its ID"""
   node(
@@ -64,8 +85,722 @@ type Query {
   ): Node
 }
 
+enum Status {
+  NEW
+  DONE
+}
+
 type Subscription {
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
+  task(where: TaskSubscriptionWhereInput): TaskSubscriptionPayload
+}
+
+type Task implements Node {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  status: Status!
+  progress: Int!
+  name: String!
+  description: String!
+  dueDate: Int
+  priority: Priority!
+  tags: [String!]!
+  parentId: Task
+  subTasks(where: TaskWhereInput, orderBy: TaskOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Task!]
+}
+
+"""A connection to a list of items."""
+type TaskConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [TaskEdge]!
+  aggregate: AggregateTask!
+}
+
+input TaskCreateInput {
+  id: ID
+  status: Status
+  progress: Int
+  name: String
+  description: String
+  dueDate: Int
+  priority: Priority
+  tags: TaskCreatetagsInput
+  parentId: TaskCreateOneInput
+  subTasks: TaskCreateManyInput
+}
+
+input TaskCreateManyInput {
+  create: [TaskCreateInput!]
+  connect: [TaskWhereUniqueInput!]
+}
+
+input TaskCreateOneInput {
+  create: TaskCreateInput
+  connect: TaskWhereUniqueInput
+}
+
+input TaskCreatetagsInput {
+  set: [String!]
+}
+
+"""An edge in a connection."""
+type TaskEdge {
+  """The item at the end of the edge."""
+  node: Task!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum TaskOrderByInput {
+  id_ASC
+  id_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  status_ASC
+  status_DESC
+  progress_ASC
+  progress_DESC
+  name_ASC
+  name_DESC
+  description_ASC
+  description_DESC
+  dueDate_ASC
+  dueDate_DESC
+  priority_ASC
+  priority_DESC
+}
+
+type TaskPreviousValues {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  status: Status!
+  progress: Int!
+  name: String!
+  description: String!
+  dueDate: Int
+  priority: Priority!
+  tags: [String!]!
+}
+
+input TaskScalarWhereInput {
+  """Logical AND on all given filters."""
+  AND: [TaskScalarWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [TaskScalarWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [TaskScalarWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
+  status: Status
+
+  """All values that are not equal to given value."""
+  status_not: Status
+
+  """All values that are contained in given list."""
+  status_in: [Status!]
+
+  """All values that are not contained in given list."""
+  status_not_in: [Status!]
+  progress: Int
+
+  """All values that are not equal to given value."""
+  progress_not: Int
+
+  """All values that are contained in given list."""
+  progress_in: [Int!]
+
+  """All values that are not contained in given list."""
+  progress_not_in: [Int!]
+
+  """All values less than the given value."""
+  progress_lt: Int
+
+  """All values less than or equal the given value."""
+  progress_lte: Int
+
+  """All values greater than the given value."""
+  progress_gt: Int
+
+  """All values greater than or equal the given value."""
+  progress_gte: Int
+  name: String
+
+  """All values that are not equal to given value."""
+  name_not: String
+
+  """All values that are contained in given list."""
+  name_in: [String!]
+
+  """All values that are not contained in given list."""
+  name_not_in: [String!]
+
+  """All values less than the given value."""
+  name_lt: String
+
+  """All values less than or equal the given value."""
+  name_lte: String
+
+  """All values greater than the given value."""
+  name_gt: String
+
+  """All values greater than or equal the given value."""
+  name_gte: String
+
+  """All values containing the given string."""
+  name_contains: String
+
+  """All values not containing the given string."""
+  name_not_contains: String
+
+  """All values starting with the given string."""
+  name_starts_with: String
+
+  """All values not starting with the given string."""
+  name_not_starts_with: String
+
+  """All values ending with the given string."""
+  name_ends_with: String
+
+  """All values not ending with the given string."""
+  name_not_ends_with: String
+  description: String
+
+  """All values that are not equal to given value."""
+  description_not: String
+
+  """All values that are contained in given list."""
+  description_in: [String!]
+
+  """All values that are not contained in given list."""
+  description_not_in: [String!]
+
+  """All values less than the given value."""
+  description_lt: String
+
+  """All values less than or equal the given value."""
+  description_lte: String
+
+  """All values greater than the given value."""
+  description_gt: String
+
+  """All values greater than or equal the given value."""
+  description_gte: String
+
+  """All values containing the given string."""
+  description_contains: String
+
+  """All values not containing the given string."""
+  description_not_contains: String
+
+  """All values starting with the given string."""
+  description_starts_with: String
+
+  """All values not starting with the given string."""
+  description_not_starts_with: String
+
+  """All values ending with the given string."""
+  description_ends_with: String
+
+  """All values not ending with the given string."""
+  description_not_ends_with: String
+  dueDate: Int
+
+  """All values that are not equal to given value."""
+  dueDate_not: Int
+
+  """All values that are contained in given list."""
+  dueDate_in: [Int!]
+
+  """All values that are not contained in given list."""
+  dueDate_not_in: [Int!]
+
+  """All values less than the given value."""
+  dueDate_lt: Int
+
+  """All values less than or equal the given value."""
+  dueDate_lte: Int
+
+  """All values greater than the given value."""
+  dueDate_gt: Int
+
+  """All values greater than or equal the given value."""
+  dueDate_gte: Int
+  priority: Priority
+
+  """All values that are not equal to given value."""
+  priority_not: Priority
+
+  """All values that are contained in given list."""
+  priority_in: [Priority!]
+
+  """All values that are not contained in given list."""
+  priority_not_in: [Priority!]
+}
+
+type TaskSubscriptionPayload {
+  mutation: MutationType!
+  node: Task
+  updatedFields: [String!]
+  previousValues: TaskPreviousValues
+}
+
+input TaskSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [TaskSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [TaskSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [TaskSubscriptionWhereInput!]
+
+  """The subscription event gets dispatched when it's listed in mutation_in"""
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: TaskWhereInput
+}
+
+input TaskUpdateDataInput {
+  status: Status
+  progress: Int
+  name: String
+  description: String
+  dueDate: Int
+  priority: Priority
+  tags: TaskUpdatetagsInput
+  parentId: TaskUpdateOneInput
+  subTasks: TaskUpdateManyInput
+}
+
+input TaskUpdateInput {
+  status: Status
+  progress: Int
+  name: String
+  description: String
+  dueDate: Int
+  priority: Priority
+  tags: TaskUpdatetagsInput
+  parentId: TaskUpdateOneInput
+  subTasks: TaskUpdateManyInput
+}
+
+input TaskUpdateManyDataInput {
+  status: Status
+  progress: Int
+  name: String
+  description: String
+  dueDate: Int
+  priority: Priority
+  tags: TaskUpdatetagsInput
+}
+
+input TaskUpdateManyInput {
+  create: [TaskCreateInput!]
+  connect: [TaskWhereUniqueInput!]
+  set: [TaskWhereUniqueInput!]
+  disconnect: [TaskWhereUniqueInput!]
+  delete: [TaskWhereUniqueInput!]
+  update: [TaskUpdateWithWhereUniqueNestedInput!]
+  updateMany: [TaskUpdateManyWithWhereNestedInput!]
+  deleteMany: [TaskScalarWhereInput!]
+  upsert: [TaskUpsertWithWhereUniqueNestedInput!]
+}
+
+input TaskUpdateManyMutationInput {
+  status: Status
+  progress: Int
+  name: String
+  description: String
+  dueDate: Int
+  priority: Priority
+  tags: TaskUpdatetagsInput
+}
+
+input TaskUpdateManyWithWhereNestedInput {
+  where: TaskScalarWhereInput!
+  data: TaskUpdateManyDataInput!
+}
+
+input TaskUpdateOneInput {
+  create: TaskCreateInput
+  connect: TaskWhereUniqueInput
+  disconnect: Boolean
+  delete: Boolean
+  update: TaskUpdateDataInput
+  upsert: TaskUpsertNestedInput
+}
+
+input TaskUpdatetagsInput {
+  set: [String!]
+}
+
+input TaskUpdateWithWhereUniqueNestedInput {
+  where: TaskWhereUniqueInput!
+  data: TaskUpdateDataInput!
+}
+
+input TaskUpsertNestedInput {
+  update: TaskUpdateDataInput!
+  create: TaskCreateInput!
+}
+
+input TaskUpsertWithWhereUniqueNestedInput {
+  where: TaskWhereUniqueInput!
+  update: TaskUpdateDataInput!
+  create: TaskCreateInput!
+}
+
+input TaskWhereInput {
+  """Logical AND on all given filters."""
+  AND: [TaskWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [TaskWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [TaskWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
+  status: Status
+
+  """All values that are not equal to given value."""
+  status_not: Status
+
+  """All values that are contained in given list."""
+  status_in: [Status!]
+
+  """All values that are not contained in given list."""
+  status_not_in: [Status!]
+  progress: Int
+
+  """All values that are not equal to given value."""
+  progress_not: Int
+
+  """All values that are contained in given list."""
+  progress_in: [Int!]
+
+  """All values that are not contained in given list."""
+  progress_not_in: [Int!]
+
+  """All values less than the given value."""
+  progress_lt: Int
+
+  """All values less than or equal the given value."""
+  progress_lte: Int
+
+  """All values greater than the given value."""
+  progress_gt: Int
+
+  """All values greater than or equal the given value."""
+  progress_gte: Int
+  name: String
+
+  """All values that are not equal to given value."""
+  name_not: String
+
+  """All values that are contained in given list."""
+  name_in: [String!]
+
+  """All values that are not contained in given list."""
+  name_not_in: [String!]
+
+  """All values less than the given value."""
+  name_lt: String
+
+  """All values less than or equal the given value."""
+  name_lte: String
+
+  """All values greater than the given value."""
+  name_gt: String
+
+  """All values greater than or equal the given value."""
+  name_gte: String
+
+  """All values containing the given string."""
+  name_contains: String
+
+  """All values not containing the given string."""
+  name_not_contains: String
+
+  """All values starting with the given string."""
+  name_starts_with: String
+
+  """All values not starting with the given string."""
+  name_not_starts_with: String
+
+  """All values ending with the given string."""
+  name_ends_with: String
+
+  """All values not ending with the given string."""
+  name_not_ends_with: String
+  description: String
+
+  """All values that are not equal to given value."""
+  description_not: String
+
+  """All values that are contained in given list."""
+  description_in: [String!]
+
+  """All values that are not contained in given list."""
+  description_not_in: [String!]
+
+  """All values less than the given value."""
+  description_lt: String
+
+  """All values less than or equal the given value."""
+  description_lte: String
+
+  """All values greater than the given value."""
+  description_gt: String
+
+  """All values greater than or equal the given value."""
+  description_gte: String
+
+  """All values containing the given string."""
+  description_contains: String
+
+  """All values not containing the given string."""
+  description_not_contains: String
+
+  """All values starting with the given string."""
+  description_starts_with: String
+
+  """All values not starting with the given string."""
+  description_not_starts_with: String
+
+  """All values ending with the given string."""
+  description_ends_with: String
+
+  """All values not ending with the given string."""
+  description_not_ends_with: String
+  dueDate: Int
+
+  """All values that are not equal to given value."""
+  dueDate_not: Int
+
+  """All values that are contained in given list."""
+  dueDate_in: [Int!]
+
+  """All values that are not contained in given list."""
+  dueDate_not_in: [Int!]
+
+  """All values less than the given value."""
+  dueDate_lt: Int
+
+  """All values less than or equal the given value."""
+  dueDate_lte: Int
+
+  """All values greater than the given value."""
+  dueDate_gt: Int
+
+  """All values greater than or equal the given value."""
+  dueDate_gte: Int
+  priority: Priority
+
+  """All values that are not equal to given value."""
+  priority_not: Priority
+
+  """All values that are contained in given list."""
+  priority_in: [Priority!]
+
+  """All values that are not contained in given list."""
+  priority_not_in: [Priority!]
+  parentId: TaskWhereInput
+  subTasks_every: TaskWhereInput
+  subTasks_some: TaskWhereInput
+  subTasks_none: TaskWhereInput
+}
+
+input TaskWhereUniqueInput {
+  id: ID
 }
 
 type User implements Node {
