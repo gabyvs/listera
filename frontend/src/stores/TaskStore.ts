@@ -1,6 +1,7 @@
 import { RootStore }  from './RootStore';
 import { observable } from 'mobx';
 import { Task }       from '../domain/Task';
+import Client         from '../client/Client';
 
 export class TaskStore {
 
@@ -13,6 +14,8 @@ export class TaskStore {
   }
 
   loadTasks() {
+    const client = new Client();
+    client.fetchAllTasks();
     const taskNames = [
       'Start app',
       'Study refactor books'
