@@ -78,7 +78,18 @@ Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
+#### Deploying the frontend app
+
+In the root folder of this repo, run
+
+`git subtree push --prefix frontend heroku-frontend master`
 
 ### Backend
 
 *The backend project requires prisma to be installed globally.*
+
+#### Deploying the backend app
+
+In the root folder of this repo, run
+
+`git subtree push --prefix backend heroku-backend master`

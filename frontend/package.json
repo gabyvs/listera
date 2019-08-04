@@ -13,6 +13,7 @@
     "@types/react-dom": "16.8.4",
     "apollo-boost": "^0.4.3",
     "bootstrap": "^4.3.1",
+    "express": "^4.17.1",
     "graphql": "^14.4.2",
     "mobx": "^5.13.0",
     "mobx-react": "^6.1.1",
@@ -20,16 +21,22 @@
     "react-bootstrap": "^1.0.0-beta.9",
     "react-dom": "^16.8.6",
     "react-scripts": "3.0.1",
+    "serve": "^11.1.0",
     "typescript": "3.5.3"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "echo \"Starting ***************\" && react-scripts start",
+    "build": "echo \"Building ***************\" && react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "serve": "serve -s build"
   },
   "eslintConfig": {
     "extends": "react-app"
+  },
+  "engines": {
+    "npm": "6.10.1",
+    "node": "10.16.1"
   },
   "browserslist": {
     "production": [
