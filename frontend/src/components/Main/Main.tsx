@@ -2,9 +2,9 @@ import React         from 'react';
 import Button        from 'react-bootstrap/Button';
 import styles        from './Main.module.css';
 import TaskList      from '../TaskList/TaskList';
-import { RootStore } from '../../stores/RootStore';
+import { ViewStore } from '../../stores/ViewStore';
 
-interface MainProps { rootStore: RootStore; }
+interface MainProps { viewStore: ViewStore; }
 
 const Main = (props: MainProps) => {
   return (
@@ -13,7 +13,7 @@ const Main = (props: MainProps) => {
         <div className={styles.taskListHeader}>
           <Button variant="primary" className={styles.addTaskBtn}>Add Task</Button>
         </div>
-        <TaskList taskStore={props.rootStore.taskStore}/>
+        <TaskList viewStore={props.viewStore}/>
       </div>
       <div className={styles.detailsContainer}>
         <img className={styles.img} src={`static/tealImg.jpg`} alt=""/>

@@ -1,15 +1,15 @@
 import React         from 'react';
 import Header        from '../Header/Header';
 import Main          from '../Main/Main';
-import { RootStore } from '../../stores/RootStore';
+import { ViewStore } from '../../stores/ViewStore';
 
-interface AppProps { rootStore: RootStore; }
+interface AppProps { viewStore: ViewStore; }
 
 const App = (props: AppProps) => {
   return (
     <div>
       <Header />
-      <Main rootStore={props.rootStore} />
+      <Main viewStore={props.viewStore} />
     </div>
   );
 }

@@ -1,28 +1,24 @@
-import { RootStore }  from './RootStore';
-import { observable } from 'mobx';
-import { Task }       from '../domain/Task';
-import Client         from '../client/Client';
+import { action, observable } from 'mobx';
+import { Task }               from '../domain/Task';
+import Client                 from '../client/Client';
+import { ITaskResponse }      from '../interfaces/ITask';
 
 export class TaskStore {
 
   @observable tasks: Task[] = [];
-  private readonly rootStore: RootStore;
+  private readonly client: Client;
 
-  constructor(rootStore: RootStore) {
-    this.rootStore = rootStore;
-    this.loadTasks();
+  constructor(client: Client) {
+    this.client = client;
   }
 
+  @action
   loadTasks() {
-    const client = new Client();
-    client.fetchAllTasks();
-    const taskNames = [
-      'Start app',
-      'Study refactor books'
-    ];
-
-    this.tasks = taskNames.map((taskName, index) => {
-      return new Task(this, index, taskName);
-    });
+    return this.client.tasks()
+      .then((tasks: ITaskResponse[]) => {
+        this.tasks = tasks.map((task: ITaskResponse) => {
+          return new Task(this, task.id, task.name);
+        })
+      });
   }
 }

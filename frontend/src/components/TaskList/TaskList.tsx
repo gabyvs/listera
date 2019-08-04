@@ -1,12 +1,12 @@
+import { observer }  from 'mobx-react';
 import React         from 'react';
 import styles        from './TaskList.module.css';
-import { TaskStore } from '../../stores/TaskStore';
-import { observer }  from 'mobx-react';
+import { ViewStore } from '../../stores/ViewStore';
 
-interface TaskListProps { taskStore: TaskStore; }
+interface TaskListProps { viewStore: ViewStore; }
 
 const TaskList = observer((props: TaskListProps) => {
-  const { tasks } = props.taskStore;
+  const { tasks } = props.viewStore;
   const taskList = tasks.map(task => (
     <div className={styles.task} key={task.id}>{task.name}</div>
   ));
