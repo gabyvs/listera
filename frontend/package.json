@@ -13,7 +13,6 @@
     "@types/react-dom": "16.8.4",
     "apollo-boost": "^0.4.3",
     "bootstrap": "^4.3.1",
-    "express": "^4.17.1",
     "graphql": "^14.4.2",
     "mobx": "^5.13.0",
     "mobx-react": "^6.1.1",
@@ -25,8 +24,8 @@
     "typescript": "3.5.3"
   },
   "scripts": {
-    "start": "echo \"Starting ***************\" && react-scripts start",
-    "build": "echo \"Building ***************\" && react-scripts build",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "serve": "serve -s build"
