@@ -12,13 +12,15 @@ export class TaskStore {
     this.client = client;
   }
 
-  @action
   loadTasks() {
     return this.client.tasks()
-      .then((tasks: ITaskResponse[]) => {
-        this.tasks = tasks.map((task: ITaskResponse) => {
-          return new Task(this, task.id, task.name);
-        })
-      });
+      .then(this.setTasks);
+  }
+
+  @action
+  setTasks = (tasks: ITaskResponse[]) => {
+    this.tasks = tasks.map((task: ITaskResponse) => {
+      return new Task(this, task.id, task.name);
+    })
   }
 }

@@ -4,7 +4,9 @@ import App                from './components/App/App';
 import * as serviceWorker from './serviceWorker';
 import { ViewStore }      from './stores/ViewStore';
 import Client             from './client/Client';
+import { configure }      from 'mobx';
 
+configure({enforceActions: 'observed'});
 const client = new Client();
 const viewStore = new ViewStore(client);
 
