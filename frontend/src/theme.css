@@ -1,6 +1,7 @@
 :root {
   /* space */
   --main-horizontal-padding: 6rem;
+  --mob-main-horizontal-padding: 2rem;
   --border-radius: .5rem;
 
   /* colors */

@@ -15,9 +15,11 @@ const Main = (props: MainProps) => {
         </div>
         <TaskList viewStore={props.viewStore}/>
       </div>
-      <div className={styles.detailsContainer}>
-        <img className={styles.img} src={`static/tealImg.jpg`} alt=""/>
-      </div>
+      {!props.viewStore.isMobile && (
+        <div className={styles.detailsContainer}>
+          <img className={styles.img} src={`static/tealImg.jpg`} alt=""/>
+        </div>
+      )}
     </div>
   );
 }
